@@ -575,13 +575,18 @@ def split(current_non_ks_cluster, k):
             distance_t = enlargement_calculation(new_tuple=t_picked_for_comparison, non_ks_cluster_item=t_chosen_new_cluster) # here we calculate distance of this tuple to the B_dash cluster
 
             #print("DEBUG: heap root:", heap[0])
-            if distance_t < heap[0]:
-                distance_t = heapreplace(heap, KeyDict(distance_t, t_picked_for_comparison))
+            # Bugfix: Done: the following if has to be ignored. This is because we add the distances
+            # one by one into the heap and they get sorted automatically in this python library.
+            # Therefore we do not have to beat the root node (smallest distance) but it is useful or
+            # even necessary to also push the other "infitnite distance" nodes further down.
+            #if distance_t < heap[0]:
+            #distance_t = heapreplace(heap, KeyDict(distance_t, t_picked_for_comparison))
+            distance_t = heappush(heap, KeyDict(distance_t, t_picked_for_comparison))
 
         
         # after arranging the heap according to min distances/ min enlargements
         # iterate over heap and add tuples to C_new
-        for i in range(len(heap)):
+        for i in range(k-1):#range(len(heap)): just the top k-1 nodes of the heap of interest
             current_heap_node = heappop(heap)
             current_t_tilde = current_heap_node.dct
 
