@@ -1064,16 +1064,24 @@ def delay_constraint(expiring_tuple, stream_of_tuples, k, my):
             
             return "NULL"
         
+        calc_total_tuples_in_non_ks_clusters = 0
         m = 0
         # check for each non-ks-anonymized cluster
         for cluster_item in non_ks_clusters:
             # calculate size of this cluster_item
             size_other_cluster = calculate_size_of_cluster(current_cluster = cluster_item)
             
+            calc_total_tuples_in_non_ks_clusters += size_other_cluster
+            
             # check if cluster size larger than current cluster
             if size_non_ks_cluster < size_other_cluster:
                 m = m+1
         if m > (len(non_ks_clusters)/2):
+            ## Description of this case: 
+            ## If the expiring cluster is smaller than (len(non_ks_clusters)/2) existing non-ks-anonmized clusters
+            ## in size, it is regarded as an outlier. In this case, CASTLE suppresses t, that is, it outputs t
+            ## with the most generalized QI value.
+            
             # suppress tuple t
             
             print("We need to suppress this current tuple..")
@@ -1081,6 +1089,21 @@ def delay_constraint(expiring_tuple, stream_of_tuples, k, my):
             #print("Output of Tuple ID =",str(expiring_tuple["index"]), ":" + "  MOST GENERAL GENERALIZATION")
             
             return "NULL"
+        
+        
+        ## Description of this case:
+        ## As the last alternative, procedure delay constraint() verifies whether a merge among C
+        ## and some of the other non-ks-anonymized clusters is possible. Notice that, if the total
+        ## size of all clusters in ks_clusters is fewer than k (step 17), a merge operation would
+        ## not generate a cluster with the size at least k. Therefore, the only way to output the
+        ## expiring tuple is suppressing it (step 18). Otherwise, the merge can take place (step 20)
+        if (calc_total_tuples_in_non_ks_clusters < k):
+            # suppress tuple t
+            print("We need to suppress this current tuple..")
+            suppress_tuple(single_tuple=expiring_tuple)
+            
+            return "NULL"
+        
         
         # otherwise we need to merge clusters
         #print("We need to merge some clusters..")
