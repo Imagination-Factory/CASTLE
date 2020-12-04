@@ -1201,19 +1201,7 @@ def CASTLE_main(new_tuple, k, delay_counts, tau_param, my, betha):
 
 
 
-
-
-# <h2>TESTING
-# Functionality of CASTLE</h2>
-# <i>Please be aware of the fact that in order to test the functionality corrctly it may be needed to re-run the whole
-# notebook because it can be that otherwise the non-ks-anonymized clusters persist in memory of previous insertions
-# which is in reality not the case. Thanks. :) </i>
-
-
-# Actual TESTS follow:
-
 # In[23]:
-
 
 def reset_environment():
     # reset the non-ks-clusters in memory
@@ -1240,38 +1228,7 @@ def reset_df(new_df):
 
 # In[24]:
 
-
 # TESTING
 # FUNCTIONALITY OF CASTLE
-
-def testing():
-    reset_environment()
-
-    # "streaming" the first tuples to the CASTLE anonymization function
-
-    for x in range(100): # do for 0..99
-        # get data from sample MAC list input
-        get_tuple = df.iloc[x]
-        get_tuple["index"] = x
-        print("+++++++++++ We give the CASTLE algorithm the next tuple (", x, ") +++++++++++++++")
-        # call CASTLE main function
-        CASTLE_main(get_tuple, k=2, delay_counts=5, tau_param=0.2, betha= 5000, my=5)
-
-    # output non-ks-clusters
-    print("--> --> --> --> --> --> --> CASTLE rounds are over --> --> --> --> --> --> -->")
-    print("--> Output the non-ks-clusters in memory: \n", printCluster(clusters_to_output=non_ks_clusters))
-    print("--> Output the ks-clusters reusable: \n", printCluster(clusters_to_output=ks_clusters))
-    print("Number of non-ks-clusters (not yet outputted): " + str(len(non_ks_clusters)))
-    print("Number of re-usuable ks-clusters outputted: " + str(len(ks_clusters)))
-
-
-# In[25]:
-
-
-testing()
-
-
-# In[ ]:
-
-
+# moved into a runnable iPython notebook
 
