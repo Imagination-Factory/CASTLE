@@ -17,6 +17,9 @@ import pandas as pd
 # we use random for choosing random items of a list
 import random
 
+# import own sub modules
+from subfunctions.clusterVisualization import printCluster
+
 
 # In[2]:
 
@@ -1206,36 +1209,6 @@ def CASTLE_main(new_tuple, k, delay_counts, tau_param, my, betha):
 # notebook because it can be that otherwise the non-ks-anonymized clusters persist in memory of previous insertions
 # which is in reality not the case. Thanks. :) </i>
 
-# We have some functions to visualize the output of our tests better:
-
-# In[22]:
-
-
-# IMPROVED VISUALIZATION OF OUTPUT
-
-def printCluster(clusters_to_output):
-    output_string = ""
-            
-    # for each cluster to be outputted
-    for cluster_item in clusters_to_output:
-        # build the generalization string
-        output_string = output_string + "G=[] "
-        for i_c, column in enumerate(cluster_item):
-            if column != 'tuples_IDs' and column != 'clusterID':
-                # get the range of the cluster
-                attr_range = cluster_item.at[0, column][0]
-                min_value = attr_range.get('min', "0")
-                max_value = attr_range.get('max', "0")
-                output_string = output_string + "[" + str(min_value) + "-" + str(max_value) + "]"
-            if column == 'tuples_IDs':
-                output_string = output_string + "tupleIDs[" + str(cluster_item.at[0, column]) + "]"
-            if column == 'clusterID':
-                output_string = output_string + "clusterID =[" + str(cluster_item.at[0, column]) + "]"
-           
-        output_string = output_string + "\n"
-
-    return output_string
-
 
 # Actual TESTS follow:
 
@@ -1299,19 +1272,6 @@ testing()
 
 
 # In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
 
 
 
